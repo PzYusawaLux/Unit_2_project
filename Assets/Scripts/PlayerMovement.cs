@@ -6,7 +6,6 @@ public class PlayerMovement : MonoBehaviour
 {
     private float horizontal;
     private float speed = 8f;
-    private float jumpingPower = 16f;
     private bool isFacingRight = true;
 
     [SerializeField] private Rigidbody2D rb;
@@ -17,11 +16,6 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
-
-        if (Input.GetButtonDown("Jump") && IsGrounded())
-        {
-            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
-        }
 
         Flip();
     }
@@ -38,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Flip()
     {
-        if ((isFacingRight && horizontal < 0f) || (!isFacingRight && horizontal > 0f))
+        if ((isFacingRight && horizontal > 0f) || (!isFacingRight && horizontal < 0f))
         {
             isFacingRight = !isFacingRight;
             Vector3 localScale = transform.localScale;
