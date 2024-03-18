@@ -5,6 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - BluePotion
+  - RedPotion
+  - Key
+  - PurpleMushroom
+  - PinkMushroom
+  - RabbitHole
   layers:
   - Default
   - TransparentFX
