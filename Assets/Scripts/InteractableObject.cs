@@ -93,6 +93,12 @@ public class InteractableObject : CollidableObject
                 NeutralizePlayer();
             }
 
+            else if (gameObject.CompareTag("flowerWhite"))
+            {
+                Debug.Log("Destroying flowerWhite object");
+                DestroyObject();
+            }
+
 
             interacted = false;
         }
@@ -172,6 +178,15 @@ public class InteractableObject : CollidableObject
         if (keyObject != null)
         {
             keyObject.SetActive(false);
+        }
+    }
+
+    private void DestroyObject()
+    {
+        GameObject flowerWhite = GameObject.FindGameObjectWithTag("flowerWhite");
+        if (flowerWhite != null)
+        {
+            flowerWhite.SetActive(false);
         }
     }
 }

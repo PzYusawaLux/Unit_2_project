@@ -11,6 +11,7 @@ TagManager:
   - PurpleMushroom
   - PinkMushroom
   - RabbitHole
+  - flowerWhite
   layers:
   - Default
   - TransparentFX
