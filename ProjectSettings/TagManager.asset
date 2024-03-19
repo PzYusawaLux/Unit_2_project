@@ -12,6 +12,7 @@ TagManager:
   - PinkMushroom
   - RabbitHole
   - flowerWhite
+  - spearObject
   layers:
   - Default
   - TransparentFX

@@ -3,7 +3,7 @@ using UnityEngine;
 public class RabitMovement : MonoBehaviour
 {
     public float speed = 5f;
-    public float disappearPoint = 10f;
+    public float disappearPoint = -74f;
 
     private void Start()
     {
