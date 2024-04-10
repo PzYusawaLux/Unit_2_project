@@ -9,11 +9,14 @@ public class InteractableObject : CollidableObject
     public Transform playerTransform;
     public Transform doorTransform;
     public Collider2D doorCollider;
+    public Collider2D cardGuard;
+    public Collider2D rabitHoleGround;
+    public GameObject rabitHoleGroundPic;
 
     public Vector3 growScale = new Vector3(0.7f, 0.7f, 0.7f);
     public Vector3 shrinkScale = new Vector3(0.2f, 0.2f, 1f);
     public Vector3 neutralizeScale = new Vector3(0.33f, 0.33f, 1f);
-    public Vector3 drawScale = new Vector3(0.2f, 1f, 1f);
+    public Vector3 drawScale = new Vector3(0.6f, 0.6f, 0.6f);
 
     public Transform rabbitHoleTarget;
 
@@ -33,15 +36,24 @@ public class InteractableObject : CollidableObject
         }
     }
 
-    private void TransitPlayer()
+    private void RabbitHoleActivate()
     {
-        if (rabbitHoleTarget != null)
+        if (rabitHoleGround != null)
         {
-            playerTransform.position = rabbitHoleTarget.position;
+            rabitHoleGround.enabled = false;
         }
         else
         {
-            Debug.LogError("Rabbit hole target location is not set!");
+            Debug.LogWarning("Rabbit hole ground collider not assigned!");
+        }
+
+        if (rabitHoleGroundPic != null)
+        {
+            rabitHoleGroundPic.SetActive(true);
+        }
+        else
+        {
+            Debug.LogWarning("Rabbit hole ground picture not assigned!");
         }
     }
 
@@ -68,7 +80,7 @@ public class InteractableObject : CollidableObject
 
             if (gameObject.CompareTag("RabbitHole"))
             {
-                TransitPlayer();
+                RabbitHoleActivate();
             }
 
             else if (gameObject.CompareTag("RedPotion"))
@@ -96,7 +108,7 @@ public class InteractableObject : CollidableObject
             else if (gameObject.CompareTag("flowerWhite"))
             {
                 Debug.Log("Destroying flowerWhite object");
-                DestroyObject();
+                HideFlower();
             }
 
 
@@ -124,7 +136,7 @@ public class InteractableObject : CollidableObject
         float xSign = Mathf.Sign(playerTransform.localScale.x);
 
         playerTransform.localScale = shrinkScale;
-        //added by purpose, or player flipped after using potion
+
         if (xSign < 0)
         {
             Vector3 newScale = playerTransform.localScale;
@@ -161,8 +173,6 @@ public class InteractableObject : CollidableObject
         }
     }
 
-
-    //open the door for player to move out of the house
     private void OpenDoor()
     {
         if (doorCollider != null)
@@ -181,8 +191,13 @@ public class InteractableObject : CollidableObject
         }
     }
 
-    private void DestroyObject()
+    private void HideFlower()
     {
+        if (cardGuard != null)
+        {
+            cardGuard.enabled = false;
+        }
+
         GameObject flowerWhite = GameObject.FindGameObjectWithTag("flowerWhite");
         if (flowerWhite != null)
         {

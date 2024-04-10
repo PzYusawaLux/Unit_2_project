@@ -6,16 +6,21 @@ public class CollidingTrigger : CollidableObject
     public GameObject playerObject;
     public GameObject targetObject;
     public GameObject movementObject;
+    public GameObject playerSleep;
+    public Transform transportTarget;
 
     private Vector3 originalPlayerScale;
     private bool interactionTriggered = false;
     private float speed = 6f;
     private float disappearPoint = 70f;
 
+    private Quaternion originalSleepRotation;
+
     protected override void Start()
     {
         base.Start();
         originalPlayerScale = playerObject.transform.localScale;
+        originalSleepRotation = playerSleep.transform.rotation;
     }
 
     protected override void OnCollided(GameObject collidedObject)
@@ -25,6 +30,9 @@ public class CollidingTrigger : CollidableObject
             ChangePlayerSize();
             ActivateTargetObject();
             MoveMovementObject();
+            TransportPlayer();
+
+            RotatePlayerSleep();
             interactionTriggered = true;
         }
     }
@@ -42,7 +50,7 @@ public class CollidingTrigger : CollidableObject
         }
         else
         {
-            Debug.LogWarning("Target object not assigned!");
+            //Debug.LogWarning("Target object not assigned!");
         }
     }
 
@@ -54,8 +62,29 @@ public class CollidingTrigger : CollidableObject
         }
         else
         {
-            Debug.LogWarning("Movement object not assigned!");
+            //Debug.LogWarning("Movement object not assigned!");
         }
+    }
+
+    private void RotatePlayerSleep()
+    {
+        playerSleep.transform.Rotate(Vector3.forward, 120f);
+        StartCoroutine(RotatePlayerSleepCoroutine());
+    }
+
+    private IEnumerator RotatePlayerSleepCoroutine()
+    {
+        float duration = 1.0f;
+        float currentTime = 0.0f;
+        Quaternion startRotation = playerSleep.transform.rotation;
+        while (currentTime < duration)
+        {
+            float t = currentTime / duration;
+            playerSleep.transform.rotation = Quaternion.Slerp(startRotation, originalSleepRotation, t);
+            currentTime += Time.deltaTime;
+            yield return null;
+        }
+        playerSleep.transform.rotation = originalSleepRotation;
     }
 
     private IEnumerator MoveObjectCoroutine()
@@ -76,6 +105,20 @@ public class CollidingTrigger : CollidableObject
         movementObject.transform.position = endPosition;
 
         movementObject.SetActive(false);
+    }
+
+    private void TransportPlayer()
+    {
+        if (transportTarget != null)
+        {
+            playerObject.transform.position = transportTarget.position;
+            playerObject.transform.localScale = originalPlayerScale;
+
+        }
+        else
+        {
+            //Debug.LogWarning("Transport target location not assigned!");
+        }
     }
 
 }
